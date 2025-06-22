@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fixed Navbar with Logo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0A192F 0%, #020C1B 100%);
+            color: #CCD6F6;
+            line-height: 1.6;
+            padding-top: 90px; /* Space for fixed navbar */
+        }
+        
+        /* Fixed navbar styling */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 10%;
+            background: rgba(10, 25, 47, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 20px rgba(2, 12, 27, 0.5);
+            z-index: 1000;
+            transition: all 0.4s ease;
+        }
+        
+        nav.scrolled {
+            padding: 10px 10%;
+            box-shadow: 0 3px 15px rgba(2, 12, 27, 0.7);
+        }
+        
+        /* Logo styling */
+        .logo {
+            height: 70px;
+            width: 70px;
+            border-radius: 50%;
+            cursor: pointer;
+            background: #64FFDA;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0A192F;
+            font-weight: bold;
+            font-size: 24px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(100, 255, 218, 0.4);
+        }
+        
+        .logo:hover {
+            transform: rotate(15deg);
+            box-shadow: 0 0 25px rgba(100, 255, 218, 0.7);
+        }
+        
+        /* Navigation links styling */
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin: 0 15px;
+            position: relative;
+        }
+        
+        .nav-links li a {
+            color: #8892B0;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 500;
+            padding: 10px 5px;
+            transition: all 0.3s ease;
+            display: block;
+        }
+        
+        .nav-links li a:hover {
+            color: #64FFDA;
+        }
+        
+        .nav-links li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: #64FFDA;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links li a:hover::after {
+            width: 100%;
+        }
+        
+        /* Responsive menu button */
+        .menu-btn {
+            display: none;
+            cursor: pointer;
+            font-size: 24px;
+            color: #64FFDA;
+        }
+        
+        /* Hero section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 10%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(100,255,218,0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: 0;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+        }
+        
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+        
+        .hero h1 span {
+            color: #64FFDA;
+            display: block;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: #8892B0;
+            max-width: 600px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 14px 40px;
+            border-radius: 4px;
+            text-decoration: none;
+            color: #64FFDA;
+            border: 1px solid #64FFDA;
+            transition: all 0.3s;
+            font-weight: 500;
+            letter-spacing: 1px;
+            background: transparent;
+        }
+        
+        .btn:hover {
+            background: rgba(100, 255, 218, 0.1);
+            box-shadow: 0 0 20px rgba(100, 255, 218, 0.3);
+            transform: translateY(-3px);
+        }
+        
+        /* Features section */
+        .features {
+            padding: 100px 10%;
+            background: #020C1B;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 60px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: #64FFDA;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+        
+        .feature-card {
+            background: rgba(100, 255, 218, 0.05);
+            border: 1px solid rgba(100, 255, 218, 0.1);
+            padding: 40px 30px;
+            border-radius: 5px;
+            transition: all 0.4s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(100, 255, 218, 0.3);
+            box-shadow: 0 10px 30px rgba(2, 12, 27, 0.8);
+            background: rgba(100, 255, 218, 0.08);
+        }
+        
+        .feature-card i {
+            font-size: 50px;
+            margin-bottom: 25px;
+            color: #64FFDA;
+        }
+        
+        .feature-card h3 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #CCD6F6;
+        }
+        
+        /* Footer */
+        footer {
+            background: rgba(2, 12, 27, 0.9);
+            padding: 40px 10%;
+            text-align: center;
+            border-top: 1px solid rgba(100, 255, 218, 0.1);
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .social-links a {
+            color: #8892B0;
+            font-size: 24px;
+            transition: all 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            color: #64FFDA;
+            transform: translateY(-5px);
+        }
+        
+        .copyright {
+            color: #8892B0;
+            font-size: 14px;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 992px) {
+            .nav-links li {
+                margin: 0 10px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            nav {
+                padding: 15px 5%;
+            }
+            
+            .menu-btn {
+                display: block;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 90px;
+                right: -100%;
+                width: 70%;
+                height: calc(100vh - 90px);
+                background: rgba(10, 25, 47, 0.98);
+                flex-direction: column;
+                align-items: center;
+                padding-top: 50px;
+                transition: all 0.5s ease;
+            }
+            
+            .nav-links.active {
+                right: 0;
+            }
+            
+            .nav-links li {
+                margin: 20px 0;
+            }
+            
+            .nav-links li a {
+                font-size: 22px;
+            }
+            
+            .hero {
+                padding: 0 5%;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .logo {
+                height: 60px;
+                width: 60px;
+                font-size: 20px;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Fixed Navigation Bar -->
+    <nav id="navbar">
+        <div class="logo">
+            <i class="fas fa-cube"></i>
+        </div>
+        
+        <ul class="nav-links">
+            <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="#"><i class="fas fa-info-circle"></i> About</a></li>
+            <li><a href="#"><i class="fas fa-code"></i> Services</a></li>
+            <li><a href="#"><i class="fas fa-briefcase"></i> Portfolio</a></li>
+            <li><a href="#"><i class="fas fa-envelope"></i> Contact</a></li>
+        </ul>
+        
+        <div class="menu-btn">
+            <i class="fas fa-bars"></i>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Modern Design <span>Fixed Navbar</span></h1>
+            <p>This responsive navigation bar stays fixed at the top with proper spacing between the logo and navigation links. The design features a modern tech-inspired color scheme with smooth animations.</p>
+            <a href="#" class="btn">Get Started</a>
+        </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section class="features">
+        <h2 class="section-title">Key Features</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <i class="fas fa-lock"></i>
+                <h3>Secure & Reliable</h3>
+                <p>Enterprise-grade security with 24/7 monitoring and automatic backups.</p>
+            </div>
+            
+            <div class="feature-card">
+                <i class="fas fa-bolt"></i>
+                <h3>Lightning Fast</h3>
+                <p>Optimized for performance with 99.9% uptime and global CDN support.</p>
+            </div>
+            
+            <div class="feature-card">
+                <i class="fas fa-mobile-alt"></i>
+                <h3>Fully Responsive</h3>
+                <p>Perfectly adapts to all screen sizes from mobile to desktop displays.</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="social-links">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-github"></i></a>
+        </div>
+        <p class="copyright">© 2023 Modern Navbar Design. All rights reserved.</p>
+    </footer>
+    
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+        
+        // Mobile menu toggle
+        const menuBtn = document.querySelector('.menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+        
+        menuBtn.addEventListener('click', function() {
+            navLinks.classList.toggle('active');
+        });
+        
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', function() {
+                navLinks.classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>
